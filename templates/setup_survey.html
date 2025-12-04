@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Survey Setup{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4>Pre-Survey Assessment</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <h5 class="mb-4">Question: What is your overall gaming time?</h5>
+                    
+                    <div class="list-group mb-4">
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="gaming_time" value="low_time" checked>
+                            Under 100 hours (Beginner)
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="gaming_time" value="medium_time">
+                            From 100 to 1000 hours (Intermediate)
+                        </label>
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="gaming_time" value="high_time">
+                            Over 1000 hours (Expert)
+                        </label>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <small><em>Note: Your selection determines the difficulty of the survey questions.</em></small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Begin Survey</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

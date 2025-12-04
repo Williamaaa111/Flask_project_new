@@ -1,0 +1,21 @@
+{
+  "name": "Student Data Tracker PWA",
+  "short_name": "DataApp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#007bff",
+  "description": "A progressive web application for tracking student data.",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/007bff/ffffff?text=DA",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/007bff/ffffff?text=DA",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

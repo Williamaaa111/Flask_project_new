@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Question {{ index + 1 }}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    
+    <!-- Header with Progress and Timer -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <span class="badge bg-primary fs-6">Difficulty: {{ difficulty|upper }}</span>
+            <span class="badge bg-secondary fs-6 ms-2">Question {{ index + 1 }} of {{ total }}</span>
+        </div>
+        <div class="badge bg-warning text-dark fs-5" id="timer">Time: 0s</div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress mb-4" style="height: 5px;">
+        {% set percent = (index / total) * 100 %}
+        <div class="progress-bar" role="progressbar" style="width: {{ percent }}%;"></div>
+    </div>
+
+    <!-- Single Question Card -->
+    <div class="card shadow-lg">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">{{ question.q }}</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="list-group mb-4">
+                    {% for option in question.options %}
+                    <label class="list-group-item list-group-item-action">
+                        <input class="form-check-input me-2" type="radio" name="option" value="{{ loop.index0 }}" required>
+                        {{ option }}
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-success btn-lg px-5">
+                        {% if index + 1 == total %}
+                            Finish Survey
+                        {% else %}
+                            Next Question →
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get the start time from the Python server (passed as timestamp)
+    // Multiplied by 1000 because JS uses milliseconds, Python uses seconds
+    const serverStartTime = {{ start_timestamp }} * 1000;
+
+    function updateTimer() {
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - serverStartTime) / 1000);
+        document.getElementById('timer').innerText = "Time: " + elapsedSeconds + "s";
+    }
+
+    // Update every second
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Run immediately on load
+</script>
+{% endblock %}

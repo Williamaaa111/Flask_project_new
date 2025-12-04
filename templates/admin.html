@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Admin Dashboard</h2>
+    {% if current_user.is_super_admin %}
+        <span class="badge bg-danger fs-6">SUPER ADMIN ACCESS</span>
+    {% endif %}
+</div>
+
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">Back to Dashboard</a>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#users">User Management</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#results">Survey Results</button></li>
+</ul>
+
+<div class="tab-content pt-3">
+  
+  <!-- USERS TAB -->
+  <div class="tab-pane fade show active" id="users">
+      <div class="alert alert-light border">
+          <small><strong>User Role:</strong> 🔴 Super Admin | 🔵 Admin | ⚫ Basic User</small>
+      </div>
+      
+      <table class="table align-middle">
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Current Role</th>
+                  {% if current_user.is_super_admin %}
+                  <th>Actions (Super Admin Only)</th>
+                  {% endif %}
+              </tr>
+          </thead>
+          <tbody>
+              {% for u in users %}
+              <tr>
+                  <td>{{ u.id }}</td>
+                  <td>{{ u.username }}</td>
+                  <td>
+                      {% if u.is_super_admin %}
+                          <span class="badge bg-danger">Super Admin</span>
+                      {% elif u.is_admin %}
+                          <span class="badge bg-primary">Admin</span>
+                      {% else %}
+                          <span class="badge bg-secondary">Student</span>
+                      {% endif %}
+                  </td>
+                  
+                  <!-- SUPER ADMIN CONTROLS -->
+                  {% if current_user.is_super_admin %}
+                  <td>
+                      {% if u.is_super_admin %}
+                          <span class="text-muted">Cannot Edit</span>
+                      {% else %}
+                          {% if u.is_admin %}
+                              <a href="{{ url_for('change_role', user_id=u.id, action='demote') }}" 
+                                 class="btn btn-sm btn-outline-warning">Revoke Admin</a>
+                          {% else %}
+                              <a href="{{ url_for('change_role', user_id=u.id, action='promote') }}" 
+                                 class="btn btn-sm btn-outline-success">Make Admin</a>
+                          {% endif %}
+                      {% endif %}
+                  </td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+
+  <!-- RESULTS TAB -->
+  <div class="tab-pane fade" id="results">
+      <table class="table table-hover">
+          <thead>
+              <tr>
+                  <th>Student</th>
+                  <th>Difficulty</th>
+                  <th>Score</th>
+                  <th>Time (s)</th>
+                  <th>Date</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for r in results %}
+              <tr>
+                  <td>{{ r.student.username }}</td>
+                  <td>{{ r.difficulty }}</td>
+                  <td>{{ r.score }} / {{ r.max_score }}</td>
+                  <td>{{ r.time_taken }}</td>
+                  <td>{{ r.date_taken.strftime('%Y-%m-%d %H:%M') }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
